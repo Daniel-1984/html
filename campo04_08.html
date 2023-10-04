@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Planilha de Leitura de Campo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+       background: linear-gradient(45deg, lime, green);
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container-futuristic {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(to right, #00c6ff, #0072ff); /* Gradiente de fundo */
+  border-radius: 20px; /* Bordas arredondadas */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra ao redor do container */
+  color: #fff; /* Cor do texto */
+  overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse as bordas arredondadas */
+}
+
+.table-container {
+  background-color: rgba(255, 255, 255, 0.1); /* Fundo translúcido para o container da tabela */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+    .table-container {
+      overflow-x: auto;
+      background-color: #F0FFFF;
+}
+
+.btn-futuristic {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .btn-futuristic:hover {
+      box-shadow: 0 0 10px rgba(0, 124, 255, 0.5);
+    }
+.small-text {
+  font-size: 10px; /* Ajuste o tamanho da fonte conforme necessário */
+}
+
+  </style>
+</head>
+
+<body>
+ <article>
+  </article>
+
+  <div class="container my-4 container-futuristic">
+    <h1 class="text-center">SISTEMA DE GESTÃO INTEGRADO</h1>
+    <h2 class="text-center">PLANILHA DE LEITURA DE CAMPO</h2>
+     <p class="text-center small-text">R-OM-07.01.01</p>
+	<p class="text-center small-text">Folha 1/1</p>
+	<p class="text-center small-text">Revisão: 04</p>
+    	<label for="data" class="form-label">Data:</label>
+    <input type="date" id="data" class="form-control" aria-label="Data da Leitura">
+
+    <div class="table-container mt-4">
+      <table id="leitura-campo" class="table table-bordered" role="grid">
+        <tr>
+        <th>Hora</th>
+        <th>Pressão Entrada (FS-01 ou FS-02)</th>
+        <th>PT-200 (Psig)</th>
+        <th>PT-400 (Psig)</th>
+            <th>Sampler GC (Psig)</th>
+            <th>PI 307 MTGÁS (Psig)</th>
+            <th>Cilindro de Gás Padrão (Psig)</th>
+            <th>FS-03 Entr. (Psig)</th>
+            <th>FS-03 Saída (Psig)</th>
+            <th>V-100 (Psig)</th>
+            <th>Posição aberta/fechada</th>
+            <th>FT-200</th>
+            <th>FT-400</th>
+            <th>FS-01</th>
+            <th>FS-02</th>
+            <th>Press. Dif. Filt. em Op.</th>
+            <th>FS-03</th>
+            <th>FS-01</th>
+            <th>FS-02</th>
+            <th>FS-03</th>
+            <th>V-100</th>
+            <th>GOV-01</th>
+            <th>GOV-02</th>
+            <th>GOV-03</th>
+            <th>GOV-04</th>
+            <th>AMOSTRAGEM</th>
+            <th>Ramal 01</th>
+            <th>Ramal 02</th>
+            <th>Ramal 03</th>
+            <th>SCADA</th>
+            <th>ROC</th>
+            <th>GC</th>
+            <th>UPS</th>
+            <th>Pressão TIE-IN APR (Psig)</th>
+            <th>Pressão Jusante SKID Reg AGGREKO (Bar)</th>
+        <th>Temp. gás Saída Aquec. (°C)</th>
+      </table>
+    </div>
+
+<div class="observation-container mt-4">
+  <label for="observation">Observação:</label>
+  <textarea id="observation" class="form-control" rows="4"></textarea>
+</div>
+<div class="shift-container mt-4">
+  <table class="table table-bordered">
+    <tr>
+      <td colspan="6" class="xl172">Turno 01 - 06:00 - 14:00 Hs</td>
+      <td colspan="12" class="xl172">Turno 02 - 14:00 - 22:00 Hs</td>
+      <td colspan="6" style="mso-ignore:colspan"></td>
+      <td colspan="10" class="xl172">Turno 03 - 22:00 - 06:00 Hs</td>
+      <td colspan="9" style="mso-ignore:colspan"></td>
+    </tr>
+    <tr>
+      <td colspan="6">
+        <label for="operator1">Operador 1:</label>
+        <select id="operator1" class="form-select">
+         <option value="Antônio">Antônio Araujo</option>
+          	<option value="Adilson">Adilson Bonfim</option>
+	<option value="Daniel">Daniel Alves</option>
+	<option value="Evandro">Evandro Crispim</option>
+	<option value="Karina">Karina Alves</option>
+          <!-- Adicione mais nomes de operadores, se necessário -->
+        </select>
+      </td>
+      <td colspan="12">
+        <label for="operator2">Operador 2:</label>
+        <select id="operator2" class="form-select">
+          <option value="Antônio">Antônio Araujo</option>
+          	<option value="Adilson">Adilson Bonfim</option>
+	<option value="Daniel">Daniel Alves</option>
+	<option value="Evandro">Evandro Crispim</option>
+	<option value="Karina">Karina Alves</option>
+          <!-- Adicione mais nomes de operadores, se necessário -->
+        </select>
+      </td>
+      <td colspan="6" style="mso-ignore:colspan"></td>
+      <td colspan="10">
+        <label for="operator3">Operador 3:</label>
+        <select id="operator3" class="form-select">
+         	 <option value="Antônio">Antônio Araujo</option>
+          	<option value="Adilson">Adilson Bonfim</option>
+	<option value="Daniel">Daniel Alves</option>
+	<option value="Evandro">Evandro Crispim</option>
+	<option value="Karina">Karina Alves</option>
+         
+        </select>
+      </td>
+      <td colspan="9" style="mso-ignore:colspan"></td>
+    </tr>
+  </table>
+</div>
+
+<button onclick="window.print();" class="btn btn-futuristic">Salvar como PDF</button>
+      <button onclick="salvarPlanilha()" class="btn btn-futuristic">Salvar como Excel</button>
+   
+
+<div class="d-flex justify-content-center mt-4">
+  <button onclick="salvarPlanilha()" class="btn btn-futuristic">Salvar Planilha</button>
+</div>
+
+<script>
+function salvarPlanilha() {
+        // Obter o texto da observação
+        const observation = document.getElementById('observation').value;
+
+        // Obter os operadores selecionados
+        const operator1 = document.getElementById('operator1').value;
+        const operator2 = document.getElementById('operator2').value;
+        const operator3 = document.getElementById('operator3').value;
+
+        // Código para salvar a planilha (Exemplo: log no console)
+        console.log("Observação:", observation);
+        console.log("Operador 1:", operator1);
+        console.log("Operador 2:", operator2);
+        console.log("Operador 3:", operator3);
+
+        // Gerar e baixar a planilha em formato Excel (XLSX)
+        const element = document.querySelector('.container-futuristic');
+        const opts = {
+          sheet: 'Planilha1', // Nome da folha
+          fileName: 'planilha-de-leitura-de-campo.xlsx', // Nome do arquivo
+        };
+        const workbook = XLSX.utils.table_to_book(element);
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        if (navigator.msSaveBlob) {
+          navigator.msSaveBlob(blob, opts.fileName); // Internet Explorer
+        } else {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = opts.fileName;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }
+      }
+
+      function salvarComoPDF() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        pdf.html(document.querySelector('.container-futuristic'), {
+          callback: (pdf) => {
+            pdf.save('planilha-de-leitura-de-campo.pdf');
+          }
+        });
+      }
+
+function salvarPlanilha() {
+  // Obter o texto da observação
+  const observation = document.getElementById('observation').value;
+  
+  // Obter os operadores selecionados
+  const operator1 = document.getElementById('operator1').value;
+  const operator2 = document.getElementById('operator2').value;
+  const operator3 = document.getElementById('operator3').value;
+  
+  // Código para salvar a planilha
+  alert("Planilha salva!");
+  console.log("Observação:", observation);
+  console.log("Operador 1:", operator1);
+  console.log("Operador 2:", operator2);
+  console.log("Operador 3:", operator3);
+}
+
+function salvarComoPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  pdf.html(document.querySelector('.container-futuristic'), {
+    callback: (pdf) => {
+      pdf.save('planilha-de-leitura-de-campo.pdf');
+    }
+  });
+}
+  function adicionarLeitura(hora) {
+    const tabela = document.getElementById('leitura-campo').getElementsByTagName('tbody')[0];
+    const novaLinha = tabela.insertRow();
+    const ultimaColuna = tabela.parentNode.rows[0].cells.length;
+
+    const novaCelulaHora = novaLinha.insertCell(0);
+    novaCelulaHora.innerText = hora; // Define o texto diretamente, tornando-o constante
+
+    for (let i = 1; i < ultimaColuna; i++) {
+      const novaCelula = novaLinha.insertCell(i);
+      novaCelula.innerHTML = '<input type="text" aria-label="Entrada de Dados">';
+    }
+  }
+
+  function adicionarLinhasAutomaticas() {
+    const horas = ["07:00", "11:00", "15:00", "19:00", "23:00", "03:00"];
+    horas.forEach(hora => adicionarLeitura(hora));
+  }
+
+
+  // Chama a função para adicionar as linhas automaticamente quando a página é carregada
+  window.onload = adicionarLinhasAutomaticas;
+
+
+
+</script>
+</body>
+
+</html>
+
+    Desenvolvedor Daniel Luiz Alves
+

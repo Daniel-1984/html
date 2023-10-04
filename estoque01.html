@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Estoque</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      
+        body {
+           background: linear-gradient(45deg, black, orange);
+
+            background-size: 100% 100%;
+            animation: gradientBackground 10s infinite;
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBackground {
+            0% {
+                background-position: 100% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            100% {
+                background-position: 0% 100%;
+            }
+        }
+
+        .container {
+            width: 70%;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group label,
+        .form-group input,
+        button {
+            display: block;
+            margin: 20px auto;
+        }
+
+        button {
+            width: 130px;
+        }
+
+        /* Estilos do cubo */
+        .cube {
+            position: absolute;
+            top: 65%;
+            left: 30%;
+            width: 200px;
+            height: 200px;
+            transform-style: preserve-3d;
+            transform: rotateX(0) rotateY(0);
+            animation: rotateCube 10s infinite linear;
+        }
+
+        .cube div {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            border: 1px solid #fff;
+            text-align: center;
+            line-height: 200px;
+            font-size: 3em;
+        }
+
+        .front, .back, .top, .bottom {
+            background: rgba(0, 128, 0, 0.7); /* Verde com 60% de transparência */
+        }
+        
+        .left, .right {
+            background: rgba(0, 0, 255, 0.7); /* Azul com 60% de transparência */
+        }
+
+        .front { transform: rotateY(0deg) translateZ(100px); }
+        .back { transform: rotateY(180deg) translateZ(100px); }
+        .left { transform: rotateY(-90deg) translateZ(100px); }
+        .right { transform: rotateY(90deg) translateZ(100px); }
+        .top { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        @keyframes rotateCube {
+            0% { transform: rotateX(0) rotateY(0); }
+            25% { transform: rotateX(90deg) rotateY(0); }
+            50% { transform: rotateX(90deg) rotateY(90deg); }
+            75% { transform: rotateX(0) rotateY(90deg); }
+            100% { transform: rotateX(0) rotateY(180deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cube">
+        <div class="front">GOM</div>
+        <div class="back">GOM</div>
+        <div class="left">GOM</div>
+        <div class="right">GOM</div>
+        <div class="top">GOM</div>
+        <div class="bottom">GOM</div>
+    </div>
+    
+    <div class="container mt-4">
+        <h1 class="text-center">Calculadora da GOM</h1>
+<h8 class="text-center">Desenvolvedor Daniel Luiz Alves: Operador da Gasocidente!</h8>
+        <div class="form-group">
+            <label for="valor">Insira o valor:</label>
+            <input type="number" step="0.0001" class="form-control" id="valor" placeholder="O resultado já é multiplicado por 1000">
+        </div>
+        <button class="btn btn-primary" onclick="calcularEstoque()">Calcular</button>
+        <h3 id="resultado" class="text-center"></h3>
+    </div>
+
+    <script>
+        function calcularEstoque() {
+            var valor = parseFloat(document.getElementById('valor').value);
+            var resultado = valor * 1000;
+            var resultadoArredondado = Math.round(resultado);
+            var valorFormatado = resultadoArredondado.toLocaleString('de-DE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.getElementById('resultado').innerText = 'Resultado: ' + valorFormatado;
+        }
+
+        // Mover o cubo
+        const cube = document.getElementById('cube');
+        let moveRight = true;
+        let moveDown = true;
+        let posX = 50;
+        let posY = 50;
+        const moveSpeed = 0.8; // Velocidade ajustada para 0.5
+
+        function moveCube() {
+            if(moveRight) {
+                posX += moveSpeed;
+                if(posX > 90) moveRight = false;
+            } else {
+                posX -= moveSpeed;
+                if(posX < 10) moveRight = true;
+            }
+
+            if(moveDown) {
+                posY += moveSpeed;
+                if(posY > 90) moveDown = false;
+            } else {
+                posY -= moveSpeed;
+                if(posY < 10) moveDown = true;
+            }
+
+            cube.style.left = posX + '%';
+            cube.style.top = posY + '%';
+
+            requestAnimationFrame(moveCube);
+        }
+
+        moveCube();
+    </script>
+</body>
+
+</html>

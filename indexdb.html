@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário com IndexedDB</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<style>
+    body {
+        padding: 20px;
+    }
+    .formulario-container {
+        max-width: 500px;
+        margin: auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    #mensagem {
+        display: none;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="formulario-container">
+    <form id="meuFormulario">
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu email" class="form-control">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+    
+    <div id="mensagem" class="alert alert-success mt-3"></div>
+</div>
+
+<script>
+    var db;
+
+    // Abrir o banco de dados ou criar um se não existir
+    var request = indexedDB.open("MeuBancoDeDados", 1);
+
+    request.onerror = function(event) {
+        console.log("Erro ao abrir o banco de dados:", event.target.errorCode);
+    };
+
+    request.onupgradeneeded = function(event) {
+        db = event.target.result;
+        var objectStore = db.createObjectStore("usuarios", { autoIncrement: true });
+    };
+
+    request.onsuccess = function(event) {
+        db = event.target.result;
+        console.log("Banco de dados aberto com sucesso");
+    };
+
+    document.getElementById('meuFormulario').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        var nome = document.getElementById('nome').value;
+        var email = document.getElementById('email').value;
+        
+        if (!nome || !email) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+        
+        var transaction = db.transaction(["usuarios"], "readwrite");
+        var objectStore = transaction.objectStore("usuarios");
+        var request = objectStore.add({nome: nome, email: email});
+        
+        request.onsuccess = function(event) {
+            console.log("Usuário adicionado com sucesso");
+            document.getElementById('meuFormulario').reset();
+            document.getElementById('mensagem').textContent = 'Dados salvos!';
+            document.getElementById('mensagem').style.display = 'block';
+        };
+        
+        request.onerror = function(event) {
+            console.log("Erro ao adicionar usuário:", event.target.errorCode);
+        };
+    });
+</script>
+
+</body>
+</html>

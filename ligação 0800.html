@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Registro</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #records-list .list-group-item {
+            transition: transform 0.2s;
+        }
+
+        #records-list .list-group-item:hover {
+            transform: scale(1.02);
+        }
+
+        .center-text {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4 center-text">Sistema de Gestão integrado</h1>
+        <h4 class="mb-4 center-text">Registro Mensal de Ligação da linha 0800</h4>
+        <div class="d-flex justify-content-end mt-2">
+            <div class="card" style="width: 08rem;">
+                <div class="card-body">
+                    <h4 class="card-title" style="font-size: 12px;"><strong>R-SO-02</strong></h4>
+                    <p class="card-text" style="font-size: 12px;"><strong>Folha: 1/1</strong></p>
+                    <p class="card-text" style="font-size: 12px;"><strong>Revisão: 02</strong></p>
+                </div>
+            </div>
+        </div>
+        <form id="registration-form">
+            <div class="form-group">
+                <label for="date">Data</label>
+                <input type="text" class="form-control" id="date" placeholder="Data" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Horário</label>
+                <input type="text" class="form-control" id="time" placeholder="Horário" required>
+            </div>
+            <div class="form-group">
+                <label for="attendee">Atendente</label>
+                <input type="text" class="form-control" id="attendee" placeholder="Atendente" required>
+            </div>
+            <div class="form-group">
+                <label for="comment">Comentário</label>
+                <input type="text" class="form-control" id="comment" placeholder="Comentário" required>
+            </div>
+            <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+            <button type="button" class="btn btn-secondary" onclick="viewReport()">Ver Relatório</button>
+        </form>
+    </div>
+    <hr>
+    <h2 class="mt-4 mb-4 center-text">Registros Salvos</h2>
+    <ul id="records-list" class="list-group">
+    </ul>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        let db;
+
+        const request = indexedDB.open("myDatabase", 1);
+
+        request.onerror = function (event) {
+            console.log("Erro ao abrir o banco de dados:", event);
+        };
+
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            renderRecords();
+        };
+
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            if (!db.objectStoreNames.contains('records')) {
+                db.createObjectStore("records", { keyPath: "id", autoIncrement: true });
+            }
+        };
+
+        document.getElementById('registration-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = {
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                attendee: document.getElementById('attendee').value,
+                comment: document.getElementById('comment').value
+            };
+
+            addRecordToDB(formData);
+        });
+
+        function addRecordToDB(record) {
+            const transaction = db.transaction(["records"], "readwrite");
+            const objectStore = transaction.objectStore("records");
+            const request = objectStore.add(record);
+            request.onsuccess = function (event) {
+                renderRecords();
+            };
+        }
+
+        function renderRecords() {
+            const recordsList = document.getElementById('records-list');
+            recordsList.innerHTML = '';
+
+            const transaction = db.transaction(["records"], "readonly");
+            const objectStore = transaction.objectStore("records");
+            objectStore.openCursor().onsuccess = function (event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = `Registro ${cursor.key}: Data - ${cursor.value.date}, Horário - ${cursor.value.time}, Atendente - ${cursor.value.attendee}, Comentário - ${cursor.value.comment}`;
+                    recordsList.appendChild(listItem);
+                    cursor.continue();
+                }
+            };
+        }
+
+        function viewReport() {
+            console.log('Redirecting to report page...');
+            window.location.href = '#';
+        }
+    </script>
+
+</body>
+
+</html>
+

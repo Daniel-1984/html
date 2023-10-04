@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+    <title>Login e Formulário de Entregas</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ff8c00;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px 5px #ff8c00;
+        }
+        .btn-primary, .btn-danger {
+            border: none;
+        }
+        .btn-primary {
+            background-color: #ff8c00;
+        }
+        .btn-danger {
+            background-color: #ff2d00;
+        }
+        .hidden {
+            display: none;
+        }
+  
+        tr {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="login-container">
+    <h2>Login</h2>
+    <form id="login-form">
+        <div class="form-group">
+            <label>Username:</label>
+            <input type="text" id="username" class="form-control bg-dark text-white">
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="password" class="form-control bg-dark text-white">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+<div class="container mt-5" id="form-container">
+    <h1>Formulário de Entregas</h1>
+
+    <div class="mt-4">
+        <h3>MTLOC.Locação de Equipamentos</h3>
+        <form id="add-form">
+            <div class="form-group">
+                <label>Nome do Motorista:</label>
+                <input type="text" id="driverName" class="form-control bg-dark text-white">
+            </div>
+            <div class="form-group">
+                <label>Nome do Ajudante:</label>
+                <input type="text" id="assistantName" class="form-control bg-dark text-white">
+            </div>
+	<div class="form-group">
+                <label>Endereço:</label>
+                <input type="text" id="endereco" class="form-control bg-dark text-white">
+            </div>
+            <div class="form-group">
+                <label>Início da Entrega:</label>
+                <input type="datetime-local" id="deliveryStart" class="form-control bg-dark text-white">
+            </div>
+            <div class="form-group">
+                <label>Término da Entrega:</label>
+                <input type="datetime-local" id="deliveryEnd" class="form-control bg-dark text-white">
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+
+    <div class="mt-5">
+        <h3>Lista de Entregas por Clientes</h3>
+        <table class="table table-striped" id="deliveryList">
+            <thead>
+                <tr>
+                    <th>Motorista</th>
+                    <th>Ajudante</th>
+	 <th>Endereço</th>
+                    <th>Início</th>
+                    <th>Término</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Preenchido pelo JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Exibir a página de login inicialmente
+    document.getElementById('login-container').style.display = 'block';
+    document.getElementById('form-container').style.display = 'none';
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Verificar se as credenciais de login estão corretas
+        if (username === '' && password === '') {
+            // Simula uma autenticação bem-sucedida e exibe o formulário de entregas
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('form-container').style.display = 'block';
+        } else {
+            // Exibe uma mensagem de erro se as credenciais estiverem incorretas
+            alert('Credenciais de login incorretas. Tente novamente.');
+        }
+    });
+});
+
+const deliveries = [];
+
+function formatDate(input) {
+    const [date, time] = input.split('T');
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year} ${time}`;
+}
+
+function addDelivery(driver, assistant,endereco, start, end) {
+    const newDelivery = {
+        driver,
+        assistant,
+        endereco,
+        start: formatDate(start),
+        end: formatDate(end)
+    };
+    deliveries.unshift(newDelivery);
+    updateTable();
+}
+
+function updateTable() {
+    const tbody = $('#deliveryList tbody');
+    tbody.empty();
+    deliveries.forEach((delivery, index) => {
+        const row = `
+            <tr>
+                <td>${delivery.driver}</td>
+                <td>${delivery.assistant}</td>
+	<td>${delivery.endereco}</td>
+                <td>${delivery.start}</td>
+                <td>${delivery.end}</td>
+                <td>
+                    <button onclick="deleteDelivery(${index})" class="btn btn-danger">Excluir</button>
+                </td>
+            </tr>
+        `;
+        tbody.append(row);
+    });
+}
+
+function deleteDelivery(index) {
+    deliveries.splice(index, 1);
+    updateTable();
+}
+
+$('#add-form').on('submit', function(e) {
+    e.preventDefault();
+    addDelivery(
+        $('#driverName').val(),
+        $('#assistantName').val(),
+       $('#endereco').val(),
+        $('#deliveryStart').val(),
+        $('#deliveryEnd').val()
+    );
+    this.reset();
+}); 
+</script>
+
+</body>
+</html>

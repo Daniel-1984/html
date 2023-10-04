@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Registro</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #records-list .list-group-item {
+            transition: transform 0.2s;
+        }
+
+        #records-list .list-group-item:hover {
+            transform: scale(1.02);
+        }
+
+        .center-text {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4 center-text">Sistema de Gestão integrado</h1>
+        <h4 class="mb-4 center-text">Registro Mensal de Ligação da linha 0800</h4>
+        <div class="d-flex justify-content-end mt-2">
+            <div class="card" style="width: 08rem;">
+                <div class="card-body">
+                    <h4 class="card-title" style="font-size: 12px;"><strong>R-SO-02</strong></h4>
+                    <p class="card-text" style="font-size: 12px;"><strong>Folha: 1/1</strong></p>
+                    <p class="card-text" style="font-size: 12px;"><strong>Revisão: 02</strong></p>
+                </div>
+            </div>
+        </div>
+        <form id="registration-form">
+            <label for="date">Data:</label>
+            <input type="date" id="date" class="form-control mb-3" required>
+            <label for="time">Hora:</label>
+            <input type="time" id="time" class="form-control mb-3" required>
+            <label for="attendee">Atendente:</label>
+            <input type="text" id="attendee" class="form-control mb-3" required>
+            <label for="comment">Comentário:</label>
+            <textarea id="comment" class="form-control mb-3" required></textarea>
+            <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+            <button type="button" class="btn btn-secondary" onclick="viewReport()">Ver Relatório</button>
+        </form>
+    </div>
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Relatório de Ligações</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Atendente</th>
+              <th>Comentário</th>
+            </tr>
+          </thead>
+          <tbody id="reportTableBody">
+            <!-- Os registros serão inseridos aqui -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <hr>
+    <h2 class="mt-4 mb-4 center-text">Registros Salvos</h2>
+    <ul id="records-list" class="list-group"></ul>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+ class CallsDatabase {
+    constructor() {
+        if (!localStorage.getItem('calls')) {
+            localStorage.setItem('calls', JSON.stringify([]));
+        }
+    }
+
+    getRecords() {
+        return JSON.parse(localStorage.getItem('calls'));
+    }
+
+    saveRecords(calls) {
+        localStorage.setItem('calls', JSON.stringify(calls));
+    }
+
+    addOrUpdateRecord(call) {
+        let calls = this.getRecords();
+
+        let existingCall = calls.find(c => c.id === call.id);
+
+        if (existingCall) {
+            Object.assign(existingCall, call);
+        } else {
+            call.id = Date.now();
+            calls.push(call);
+        }
+
+        this.saveRecords(calls);
+    }
+
+    getRecordById(id) {
+        let calls = this.getRecords();
+        return calls.find(c => c.id === id);
+    }
+
+    deleteRecord(id) {
+        let calls = this.getRecords();
+        calls = calls.filter(c => c.id !== id);
+        this.saveRecords(calls);
+    }
+}
+
+class UI {
+    // ... (restante do código da classe UI sem alterações)
+}
+
+const db = new CallsDatabase();
+
+document.getElementById('registration-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    db.addOrUpdateRecord(UI.getFormData());
+    UI.clearForm();
+    UI.renderRecords();
+});
+
+function editRecord(id) {
+    let call = db.getRecordById(id);
+    document.getElementById('date').value = call.date;
+    document.getElementById('time').value = call.time;
+    document.getElementById('attendee').value = call.attendee;
+    document.getElementById('comment').value = call.comment;
+}
+
+function deleteRecord(id) {
+    let confirmation = confirm("Você tem certeza que deseja excluir este registro?");
+    if (confirmation) {
+        db.deleteRecord(id);
+        UI.renderRecords();
+    }
+}
+
+function viewReport() {
+    let calls = db.getRecords();
+function addOrUpdateRecord(call) {
+    let calls = getAllRecords();
+    
+    if (call.id) {
+        let index = calls.findIndex(c => c.id === call.id);
+        calls[index] = call;
+    } else {
+        call.id = Date.now();
+        calls.push(call);
+    }
+
+    localStorage.setItem('calls', JSON.stringify(calls));
+    UI.renderRecords();
+    alert('Registro salvo com sucesso!');
+    UI.clearForm();
+}
+
+function getAllRecords() {
+    let calls = localStorage.getItem('calls');
+    return calls ? JSON.parse(calls) : [];
+}
+
+function getRecordById(id) {
+    return getAllRecords().find(call => call.id === id);
+}
+
+function deleteRecord(id) {
+    let calls = getAllRecords();
+    calls = calls.filter(call => call.id !== id);
+    localStorage.setItem('calls', JSON.stringify(calls));
+    UI.renderRecords();
+    alert('Registro excluído com sucesso!');
+}
+
+</script>
+</body>
+</html>

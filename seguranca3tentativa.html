@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <div id="error-message" class="text-danger mt-2"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setFailedAttempts(value) {
+        localStorage.setItem('failedAttempts', value);
+    }
+
+    function getFailedAttempts() {
+        return parseInt(localStorage.getItem('failedAttempts') || '0');
+    }
+
+    function setLockTime() {
+        const lockTime = new Date().getTime() + 120000;  // 2 minutos a partir de agora
+        localStorage.setItem('lockTime', lockTime.toString());
+    }
+
+    function getLockTime() {
+        return parseInt(localStorage.getItem('lockTime') || '0');
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        let isLoginSuccessful = username === 'admin' && password === '1234';
+
+        if (!isLoginSuccessful) {
+            let failedAttempts = getFailedAttempts() + 1;
+            setFailedAttempts(failedAttempts);
+
+            if (failedAttempts >= 3) {
+                setLockTime();
+                document.getElementById("error-message").textContent = "Você errou a senha 3 vezes. Sua conta foi bloqueada por 2 minutos.";
+                document.querySelector("button[type='submit']").disabled = true;
+            } else {
+                document.getElementById("error-message").textContent = `Falha no login. Você tem ${3 - failedAttempts} tentativas restantes.`;
+            }
+        } else {
+            localStorage.clear(); // Limpa tudo ao fazer login com sucesso
+            alert("Login bem-sucedido!");
+        }
+    });
+
+    function checkLockStatus() {
+        const currentLockTime = getLockTime();
+        if (getFailedAttempts() >= 3 && new Date().getTime() < currentLockTime) {
+            const remainingTime = Math.round((currentLockTime - new Date().getTime()) / 60000);
+            document.getElementById("error-message").textContent = `Sua conta está bloqueada. Por favor, tente novamente em ${remainingTime} minutos.`;
+            document.querySelector("button[type='submit']").disabled = true;
+            setTimeout(checkLockStatus, 30000); // Checa novamente em 30 segundos
+        } else {
+            localStorage.clear();
+            document.querySelector("button[type='submit']").disabled = false;
+            document.getElementById("error-message").textContent = "";
+        }
+    }
+
+    checkLockStatus();
+</script>
+
+</body>
+</html>

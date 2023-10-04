@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário com LocalStorage</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+    }
+    #meuFormulario {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    #listaDeUsuarios {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+    button {
+        background-color: #008CBA;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #005f5f;
+    }
+</style>
+<body>
+
+<form id="meuFormulario">
+    <label for="nome">Nome:</label><br>
+    <input type="text" id="nome" name="nome" placeholder="Digite seu nome"><br><br>
+    
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" placeholder="Digite seu email"><br><br>
+    
+    <button type="submit">Enviar</button>
+</form>
+
+<script>
+    // Carregar os dados do localStorage quando a página é carregada
+    document.getElementById('nome').value = localStorage.getItem('nome');
+    document.getElementById('email').value = localStorage.getItem('email');
+
+    // Adicionar um ouvinte de eventos para o formulário ser submetido
+    document.getElementById('meuFormulario').addEventListener('submit', function(e) {
+        e.preventDefault();  // Evitar que o formulário seja realmente submetido
+
+        // Salvar os dados no localStorage
+        localStorage.setItem('nome', document.getElementById('nome').value);
+        localStorage.setItem('email', document.getElementById('email').value);
+        
+        alert('Dados salvos!');
+    });
+</script>
+
+</body>
+</html>

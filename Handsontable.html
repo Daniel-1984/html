@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Planilha de Leitura de Campo</title>
+  <!-- Adicione o link do Handsontable CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@11.2.0/dist/handsontable.min.css">
+  <!-- Seus outros links de CSS e JavaScript -->
+</head>
+<body>
+  <!-- Seu conteúdo HTML existente -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+       background: linear-gradient(45deg, green, green);
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container-futuristic {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(to right, #00c6ff, #0072ff); /* Gradiente de fundo */
+  border-radius: 20px; /* Bordas arredondadas */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra ao redor do container */
+  color: #fff; /* Cor do texto */
+  overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse as bordas arredondadas */
+}
+
+.table-container {
+  background-color: rgba(255, 255, 255, 0.1); /* Fundo translúcido para o container da tabela */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+    .table-container {
+      overflow-x: auto;
+      background-color: #F0FFFF;
+}
+
+.btn-futuristic {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .btn-futuristic:hover {
+      box-shadow: 0 0 10px rgba(0, 124, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- Div para conter a tabela do Handsontable -->
+  <div id="handsontable-container" class="table-container mt-4"></div>
+<h1 class="text-center">SISTEMA DE GESTÃO INTEGRADO</h1>
+    <h2 class="text-center">PLANILHA DE LEITURA DE CAMPO</h2>
+    <p class="text-center">Folha 1/1</p>
+    <p class="text-center">Revisão: 04</p>
+    <label for="data" class="form-label">Data:</label>
+    <input type="date" id="data" class="form-control" aria-label="Data da Leitura">
+
+    <div class="table-container mt-4">
+      <table id="leitura-campo" class="table table-bordered" role="grid">
+        <tr>
+        <th>Hora</th>
+        <th>Pressão Entrada (FS-01 ou FS-02)</th>
+        <th>PT-200 (Psig)</th>
+        <th>PT-400 (Psig)</th>
+            <th>Sampler GC (Psig)</th>
+            <th>PI 307 MTGÁS (Psig)</th>
+            <th>Cilindro de Gás Padrão (Psig)</th>
+            <th>FS-03 Entr. (Psig)</th>
+            <th>FS-03 Saída (Psig)</th>
+            <th>V-100 (Psig)</th>
+            <th>Posição aberta/fechada</th>
+            <th>FT-200</th>
+            <th>FT-400</th>
+            <th>FS-01</th>
+            <th>FS-02</th>
+            <th>Press. Dif. Filt. em Op.</th>
+            <th>FS-03</th>
+            <th>FS-01</th>
+            <th>FS-02</th>
+            <th>FS-03</th>
+            <th>V-100</th>
+            <th>GOV-01</th>
+            <th>GOV-02</th>
+            <th>GOV-03</th>
+            <th>GOV-04</th>
+            <th>AMOSTRAGEM</th>
+            <th>Ramal 01</th>
+            <th>Ramal 02</th>
+            <th>Ramal 03</th>
+            <th>SCADA</th>
+            <th>ROC</th>
+            <th>GC</th>
+            <th>UPS</th>
+            <th>Pressão TIE-IN APR (Psig)</th>
+            <th>Pressão Jusante SKID Reg AGGREKO (Bar)</th>
+        <th>Temp. gás Saída Aquec. (°C)</th>
+      </table>
+    </div>
+
+  <!-- Seus botões e scripts existentes -->
+
+<button onclick="window.print();" class="btn btn-futuristic">Salvar como PDF</button>
+
+<div class="d-flex justify-content-center mt-4">
+  <button onclick="salvarPlanilha()" class="btn btn-futuristic">Salvar Planilha</button>
+</div>
+  <script>
+    // Seu código JavaScript existente
+function salvarComoPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  pdf.html(document.querySelector('.container-futuristic'), {
+    callback: (pdf) => {
+      pdf.save('planilha-de-leitura-de-campo.pdf');
+    }
+  });
+}
+  function adicionarLeitura(hora) {
+    const tabela = document.getElementById('leitura-campo').getElementsByTagName('tbody')[0];
+    const novaLinha = tabela.insertRow();
+    const ultimaColuna = tabela.parentNode.rows[0].cells.length;
+
+    const novaCelulaHora = novaLinha.insertCell(0);
+    novaCelulaHora.innerText = hora; // Define o texto diretamente, tornando-o constante
+
+    for (let i = 1; i < ultimaColuna; i++) {
+      const novaCelula = novaLinha.insertCell(i);
+      novaCelula.innerHTML = '<input type="text" aria-label="Entrada de Dados">';
+    }
+  }
+
+  function adicionarLinhasAutomaticas() {
+    const horas = ["07:00", "11:00", "15:00", "19:00", "23:00", "03:00"];
+    horas.forEach(hora => adicionarLeitura(hora));
+  }
+
+  function salvarPlanilha() {
+    // Código para salvar a planilha
+    alert("Planilha salva!");
+  }
+
+  // Chama a função para adicionar as linhas automaticamente quando a página é carregada
+  window.onload = adicionarLinhasAutomaticas;
+
+</script>
+    // Código para criar a tabela usando o Handsontable
+    var hotData = [
+      // Coloque seus dados iniciais aqui, se necessário
+    ];
+
+    var hotContainer = document.getElementById('handsontable-container');
+    var hotSettings = {
+      data: hotData,
+      colHeaders: true,
+      rowHeaders: true,
+      // Aqui você pode personalizar outras opções do Handsontable, se desejar
+    };
+
+    var hot = new Handsontable(hotContainer, hotSettings);
+  </script>
+</body>
+</html>

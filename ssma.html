@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>SIPAT 2023 - Segurança no Trabalho</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(45deg, black, orange);
+      background-size: 100% 100%;
+      animation: gradientBackground 10s infinite;
+      color: white;
+      font-weight: bold;
+      overflow: hidden;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: 50px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #FFBF00, 0 0 20px #FFBF00, 0 0 30px #FFBF00, 0 0 40px #FFBF00, 0 0 50px #FFBF00, 0 0 60px #FFBF00, 0 0 70px #FFBF00;
+      white-space: nowrap;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #ffbf00;
+      border-radius: 20px;
+      transition: all 0.5s;
+    }
+
+    .card:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: scale(1.05);
+    }
+
+    .card-title, .card-text {
+      text-shadow: 0 0 5px #ffbf00, 0 0 10px #ffbf00;
+    }
+
+    @keyframes gradientBackground {
+      0% {
+        background-position: 100% 0%;
+      }
+      50% {
+        background-position: 100% 100%;
+      }
+      100% {
+        background-position: 0% 100%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<h1 id="carousel-text">Semana Interna de Prevenção de Acidentes de Trabalho – SIPAT 2023</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">"Trabalhar com segurança não é só uma regra, é um ato de amor. Cada dia seguro no trabalho é um dia a mais com quem você ama. Sua família conta com você; conte com a segurança."</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">"Prevenir acidentes é mais do que um dever, é um gesto de amor. Sua família espera por você, não a deixe esperando em vão. Segurança sempre, em nome daqueles que amamos."</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">"Trabalhe com segurança para ensinar o valor da vida ao seu filho. Cada dia seguro é mais um exemplo que você dá. A melhor lição é voltar para casa todos os dias."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let textIndex = 0;
+  const texts = [
+    "Semana Interna de Prevenção de Acidentes de Trabalho – SIPAT 2023"
+   
+  ];
+
+  function changeText() {
+    document.getElementById("carousel-text").textContent = texts[textIndex];
+    textIndex = (textIndex + 1) % texts.length;
+  }
+
+  setInterval(changeText, 3000); // Troca o texto a cada 3 segundos (3000ms)
+</script>
+
+</body>
+</html>

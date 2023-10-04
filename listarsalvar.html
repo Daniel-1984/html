@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+
+    <title>Relatório</title>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <!-- Cabeçalho do Relatório -->
+            <div class="text-center mb-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <img src="C:\Users\dalves\Pictures\gaso01.png.jpg" alt="Logo GasOcidente" width="120">
+                    <div class="text-center mt-2">
+                        <small>GasOcidente</small>
+                    </div>
+                </div>
+                <div>
+                    <h2>SISTEMA DE GESTÃO INTEGRADO</h2>
+                    <p>Registro Mensal de Ligação da Linha 0800</p>
+                </div>
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td>R-SO-02</td>
+                            </tr>
+                            <tr>
+                                <td>Folha 1/1</td>
+                            </tr>
+                            <tr>
+                                <td>Revisão: 02</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="report-content">
+                <!-- Informações do Relatório -->
+                <div class="d-flex justify-content-between">
+                    <p>PERIODO: <input type="text" id="periodo"></p>
+                    <p>Folha 1/1</p>
+                    <p>ASSINATURA: <input type="text" id="assinatura"></p>
+                </div>
+
+                <!-- Tabela do Relatório -->
+                <table class="table table-bordered" id="mainTable">
+                    <thead>
+                        <tr>
+                            <th>DATA</th>
+                            <th>HORÁRIO</th>
+                            <th>ATENDENTE</th>
+                            <th>COMENTÁRIOS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Aqui pode-se adicionar linhas conforme a necessidade -->
+                        <tr>
+                            <td><input type="date" class="form-control" id="data"></td>
+                            <td><input type="time" class="form-control" id="horario"></td>
+                            <td><input type="text" class="form-control" id="atendente"></td>
+                            <td><input type="text" class="form-control" id="comentario"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botão para salvar no localStorage -->
+          
+<button class="btn btn-primary" onclick="addRowToTable()">Salvar</button>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+function addRowToTable() {
+    // Obtendo os valores dos campos de entrada
+    const data = document.getElementById("data").value;
+    const horario = document.getElementById("horario").value;
+    const atendente = document.getElementById("atendente").value;
+    const comentario = document.getElementById("comentario").value;
+
+    // Acessando o tbody da tabela principal
+    const tbody = document.querySelector("#mainTable tbody");
+
+    // Criando uma nova linha
+    const newRow = tbody.insertRow();
+
+    // Adicionando as células à linha
+    newRow.insertCell(0).textContent = data;
+    newRow.insertCell(1).textContent = horario;
+    newRow.insertCell(2).textContent = atendente;
+    newRow.insertCell(3).textContent = comentario;
+
+    // Limpando os campos de entrada para nova entrada
+    document.getElementById("data").value = "";
+    document.getElementById("horario").value = "";
+    document.getElementById("atendente").value = "";
+    document.getElementById("comentario").value = "";
+}
+
+function saveToLocalStorage() {
+    console.log("Salvando relatório no localStorage...");
+
+    // Obtendo os valores
+    const periodo = document.getElementById("periodo").value;
+    const assinatura = document.getElementById("assinatura").value;
+    const data = document.getElementById("data").value;
+    const horario = document.getElementById("horario").value;
+    const atendente = document.getElementById("atendente").value;
+    const comentario = document.getElementById("comentario").value;
+
+    // Serializar o relatório em um objeto
+    const report = {
+        periodo: periodo,
+        assinatura: assinatura,
+        data: data,
+        horario: horario,
+        atendente: atendente,
+        comentario: comentario,
+    };
+    
+    function captureScreen() {
+    html2canvas(document.body).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'screenshot.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+
+    // Armazene o relatório no localStorage
+    localStorage.setItem("report", JSON.stringify(report));
+
+    console.log("Relatório salvo com sucesso!");
+}
+<button class="btn btn-secondary" onclick="captureScreen()">Salvar Print</button>
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário com LocalStorage</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<style>
+    body {
+        padding: 20px;
+    }
+    .formulario-container {
+        max-width: 500px;
+        margin: auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    #mensagem {
+        display: none;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="formulario-container">
+    <form id="meuFormulario">
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu email" class="form-control">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+    
+    <div id="mensagem" class="alert alert-success mt-3"></div>
+</div>
+
+<script>
+    function getElem(id) {
+        return document.getElementById(id);
+    }
+
+    function getDados() {
+        return JSON.parse(localStorage.getItem('dados')) || [];
+    }
+
+    function setDados(dados) {
+        localStorage.setItem('dados', JSON.stringify(dados));
+    }
+
+    document.getElementById('meuFormulario').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        var nome = getElem('nome').value;
+        var email = getElem('email').value;
+        
+        if (!nome || !email) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+        
+        var dados = getDados();
+        dados.push({nome: nome, email: email});
+        setDados(dados);
+        
+        getElem('meuFormulario').reset();
+        
+        var mensagem = getElem('mensagem');
+        mensagem.textContent = 'Dados salvos!';
+        mensagem.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>

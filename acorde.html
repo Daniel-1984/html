@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exemplo de Acordes com Web Audio API</title>
+</head>
+<body>
+  <h1>Exemplo de Acordes com Web Audio API</h1>
+  <button id="playChord">Tocar Acorde C Maior</button>
+
+  <script>
+    // Função para tocar o acorde
+    function playChord() {
+      // Criar o contexto de áudio
+      const audioContext = new AudioContext();
+
+      // Frequências para as notas do acorde C maior (C4, E4, G4)
+      const frequencies = [261.63, 329.63, 392.00];
+
+      // Criar e tocar os osciladores
+      frequencies.forEach(freq => {
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+        
+        oscillator.connect(audioContext.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 1);
+      });
+    }
+
+    // Vincular a função ao botão
+    document.getElementById('playChord').addEventListener('click', playChord);
+  </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planilha de Férias</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    background: linear-gradient(45deg, black, orange);
+
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+    }
+        .container-futuristic {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(to right, #00c6ff, #0072ff); /* Gradiente de fundo */
+  border-radius: 20px; /* Bordas arredondadas */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra ao redor do container */
+  color: #fff; /* Cor do texto */
+  overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse as bordas arredondadas */
+}
+    }
+    h1, h2 {
+      color: #333;
+    }
+  .btn-futuristic:hover {
+      box-shadow: 0 0 10px rgba(0, 124, 255, 0.5);
+    }
+    ul#feriasList {
+      list-style-type: none;
+      padding: 0;
+    }
+    ul#feriasList li {
+      background-color: black;
+      border: 1px solid #ddd;
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body> 
+
+  <div class="container my-4 container-futuristic">
+    <h1><i class="fas fa-plane-departure"></i> Planilha de Férias</h1>
+    <form id="feriasForm">
+      <div class="form-group">
+        <label for="nome"><i class="fas fa-user"></i> Nome:</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+      </div>
+      <div class="form-group">
+        <label for="dataInicio"><i class="fas fa-calendar-alt"></i> Data de Início:</label>
+        <input type="date" class="form-control" id="dataInicio" name="dataInicio" required>
+      </div>
+      <div class="form-group">
+        <label for="dataFim"><i class="fas fa-calendar-check"></i> Data de Término:</label>
+        <input type="date" class="form-control" id="dataFim" name="dataFim" required>
+      </div>
+      <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Registrar Férias</button>
+    </form>
+    <div class="mt-3">
+      <h2><i class="fas fa-list-ul"></i> Férias Registradas</h2>
+      <ul id="feriasList"></ul>
+<a href="https://www.4devs.com.br/calculo_de_ferias" class="btn btn-info" target="_blank"> Cálculo de férias</a>
+
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+
+<script>
+    function formatDate(dateString) {
+      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat('pt-BR', options).format(date);
+    }
+
+    $(document).ready(function() {
+      $('#feriasForm').submit(function(event) {
+        event.preventDefault();
+        const nome = $('#nome').val();
+        const dataInicio = formatDate($('#dataInicio').val());
+        const dataFim = formatDate($('#dataFim').val());
+        const listItem = `
+          <li>
+            Nome: ${nome}, Data de Início: ${dataInicio}, Data de Término: ${dataFim}
+            <span class="delete-icon float-right" style="cursor: pointer;">
+              <i class="fas fa-trash-alt text-white"></i>
+            </span>
+          </li>`;
+        $('#feriasList').append(listItem);
+        $('#nome').val('');
+        $('#dataInicio').val('');
+        $('#dataFim').val('');
+
+        $('.delete-icon').click(function() {
+          $(this).parent().remove();
+        });
+      });
+    });
+  </script>
+<footer>
+    Desenvolvedor Daniel Luiz Alves
+</footer>
+</body>
+</html>
